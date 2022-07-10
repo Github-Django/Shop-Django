@@ -1,0 +1,6 @@
+{% extends "star_ratings/widget_base.html" %}
+{% block rating_detail %}
+    {% if not user.is_authenticated %}<br>
+<small>  برای امتیاز دهی وارد شوید</small>
+    {% endif %}
+{% endblock %}

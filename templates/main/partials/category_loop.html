@@ -1,0 +1,17 @@
+<ul class="cat-mega-menu">
+    {% for cat in data.children.active %}
+        <li>
+            <ul>
+
+                <li class="dropdown-title">{{ data.name }}</li>
+                <li><a href="{{ cat.get_absolute_url }}">{{ cat.name }}</a>
+                    {% if cat.children.active %}
+                        {% include 'main/partials/category_loop.html' %}
+                    {% endif %}
+                </li>
+
+            </ul>
+        </li>
+    {% endfor %}
+</ul>
+

@@ -1,0 +1,707 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load ratings %}
+{% load thumbnail %}
+{% block main %}
+
+    <main>
+
+        <!-- breadcrumb-area -->
+        {#        <div class="breadcrumb-area breadcrumb-style-two" data-background="img/bg/s_breadcrumb_bg01.jpg">#}
+        {#            <div class="container">#}
+        {#                <div class="row">#}
+        {#                    <div class="col-lg-3 d-none d-lg-block">#}
+        {#                        <div class="previous-product">#}
+        {#                            <a href="shop-details.html"><i class="fas fa-angle-left"></i> محصول قبلی</a>#}
+        {#                        </div>#}
+        {#                    </div>#}
+        {#                    <div class="col-lg-6">#}
+        {#                        <div class="breadcrumb-content">#}
+        {#                            <nav aria-label="breadcrumb">#}
+        {#                                <ol class="breadcrumb">#}
+        {#                                    <li class="breadcrumb-item"><a href="index.html">خانه </a></li>#}
+        {#                                    <li class="breadcrumb-item"><a href="shop.html">زمستانی 20</a></li>#}
+        {#                                    <li class="breadcrumb-item"><a href="shop.html">زنانه </a></li>#}
+        {#                                    <li class="breadcrumb-item active" aria-current="page">کت ردیاب</li>#}
+        {#                                </ol>#}
+        {#                            </nav>#}
+        {#                        </div>#}
+        {#                    </div>#}
+        {#                    <div class="col-lg-3 d-none d-lg-block">#}
+        {#                        <div class="next-product">#}
+        {#                            <a href="shop-details.html">محصول جدید <i class="fas fa-angle-right"></i></a>#}
+        {#                        </div>#}
+        {#                    </div>#}
+        {#                </div>#}
+        {#            </div>#}
+        {#        </div>#}
+        <!-- breadcrumb-area-end -->
+
+        <!-- shop-details-area -->
+        <section class="shop-details-area pt-100 pb-95">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-7">
+                        <div class="shop-details-flex-wrap">
+                            <ul class="cd-gallery">
+                                <li>
+                                    <a>
+                                        <ul class="cd-item-wrapper">
+                                            <li class="selected" style="margin: 0 160px 90px 0;">
+                                                <img style="margin: 50px -5px" width="100%"
+                                                     src="{{ product.image.url }}"
+                                                     alt="Preview image">
+                                            </li>
+                                            {% for rs in images %}
+                                                <li class="move-right" style="margin: 0 160px 90px 0;">
+                                                    <img style="margin: 50px -5px" width="100%" src="{{ rs.image.url }}"
+                                                         alt="Preview image">
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </a><!-- cd-item-wrapper -->
+                                    <div></div>
+                                </li>
+                            </ul> <!-- cd-gallery -->
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="shop-details-content">
+                            {#                            <a href="#" class="product-cat">کت ردیاب</a>#}
+                            <h3 class="title">{{ product.name }}</h3>
+                            <div class="rating">
+                                {% ratings product %}
+
+                            </div>
+                            {#                            <p class="style-name">نام سبک: تی ساید - مدل 5989 ساطری#</p>#}
+
+                            {% if not variants.discount %}
+                                <div class="price">قیمت: {{ variants.unit_price | intcomma }} تومان</div>
+                            {% else %}
+                                <div class="price">
+                                    قیمت:&nbsp;&nbsp;
+                                    <s> {{ variants.unit_price | intcomma }} تومان </s>&nbsp;&nbsp;&nbsp;&nbsp; <span
+                                        style="color: red" class="fa fa-tag">{{ variants.discount }}% تخفیف </span>&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                    {{ variants.total_price | intcomma }} تومان
+                                </div>
+
+                            {% endif %}
+
+                            {% if product.status != "None" %}
+
+                                <div class="product-details-info">
+                                    <div class="btn-group">
+                                        {% if product.status == 'Both' %}
+                                            <strong>اندازه : </strong>&nbsp;&nbsp;
+                                            <form action="" method="post">{% csrf_token %}
+                                                <select name="selected" id="selected"
+                                                        class="form-control margin-0 selectpicker" size=""
+                                                        onchange="this.form.submit();">
+                                                    {% for data in size %}
+                                                        <option name="selected" value="{{ data.id }}"
+                                                                {% if variants.id == data.id %}
+                                                                selected
+                                                                {% endif %}>
+                                                            {{ data.size_variant }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </form>
+                                            &nbsp;&nbsp;
+                                            &nbsp;&nbsp;
+                                            &nbsp;&nbsp;
+                                            <strong>رنگ : </strong>&nbsp;&nbsp;
+                                            <br>
+
+                                            <form action="" method="post">{% csrf_token %}
+
+                                                <select name="selected" id="selected"
+                                                        class="form-control margin-0 selectpicker"
+                                                        onchange="this.form.submit();">
+                                                    {% for data in colors %}
+                                                        <option name="selected" value="{{ data.id }}"
+                                                                {% if variants.id == data.id %}
+                                                                selected
+                                                                {% endif %}
+                                                        >
+                                                            {{ data.color_variant }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </form>
+                                        {% elif product.status == 'Size' %}
+                                            <strong>اندازه : </strong>&nbsp;&nbsp;
+
+                                            <form action="" method="post">{% csrf_token %}
+                                                <select name="selected" id="selected"
+                                                        class="form-control margin-0 selectpicker"
+                                                        onchange="this.form.submit();">
+                                                    {% for data in variant %}
+                                                        <option name="selected" value="{{ data.id }}"
+                                                                {% if variants.id == data.id %}
+                                                                selected
+                                                                {% endif %}
+                                                        >
+                                                            {{ data.size_variant }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </form>
+                                        {% elif product.status == 'Color' %}
+                                            <strong>رنگ : </strong>
+                                            <form action="" method="post">{% csrf_token %}
+                                                <select name="selected" id="selected"
+                                                        class="form-control margin-0 selectpicker"
+                                                        onchange="this.form.submit();">
+                                                    {% for data in variant %}
+                                                        <option name="selected" value="{{ data.id }}"
+                                                                {% if variants.id == data.id %}
+                                                                selected
+                                                                {% endif %}
+                                                        >
+                                                            {{ data.color_variant }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </form>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="perched-info">
+                                <div class="cart-plus-minus">
+                                    <form action="{% url 'cart:add' %}" method="post">{% csrf_token %}
+                                        <input type="hidden" class="in-num" value="{{ variants.id }}" name="test">
+                                        {#                                        <input type="number" class="in-num" value="1" name="quantity">#}
+
+
+                                        <input type="hidden" id="number{{ variants.id }}"
+                                               value="1" min="1"
+                                               max="{{ variants.quantity }}" name="quantity">
+
+                                </div>
+
+                                <button type="submit" class="btn">افزودن به سبد خرید</button>
+
+                                </form>
+                                <div class="wishlist-compare">
+                                    <ul>
+                                        {% if request.user.is_authenticated %}
+                                            {% if request.user in product.favourite.all %}
+                                                <li><a href="{% url 'main:favourite_product' product.id %}"
+                                                       class="favourite-product fa-btn1" data-id='1' data-text="remove">
+                                                    <i class="fa fa-heart test1" style="color:red"></i>حذف از علاقه
+                                                    مندیها</a></li>
+                                            {% else %}
+                                                <li><a href="{% url 'main:favourite_product' product.id %}"
+                                                       class="favourite-product fa-btn2" data-id='2' data-text="add">
+                                                    <i class="fa fa-heart test2" style="color:#eee"></i> افزودن به علاقه
+                                                    مندیها</a></li>
+                                            {% endif %}
+                                        {% else %}
+                                            <div data-toggle="tooltip" data-placement="right"
+                                                 title="برای افزودن به علاقه مندیها باید وارد شوید">
+                                                <li>
+                                                    <i class="fa fa-heart test2" style="color:#eee"></i> افزودن به علاقه
+                                                    مندیها
+                                                </li>
+                                            </div>
+                                        {% endif %}
+                                        <form action="{% url 'main:compare' product.id %}">
+                                            <i class="fas fa-retweet"></i><input style="width: 160px;" type="submit"
+                                                                                 value="افزودن برای مقایسه کردن"
+                                                                                 name="product">
+
+
+                                        </form>
+
+                                    </ul>
+                                </div>
+
+                            </div>
+                            {% if messages %}
+                                <ul class="messages">
+                                    {% for message in messages %}
+                                        {% if message.tags %}
+
+                                            <div class="alert alert-success" role="alert">
+                                                <button type="button" class="close"
+                                                        data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>&nbsp;&nbsp;
+                                                {{ message }}
+
+                                            </div>
+
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                            <div class="blog-bottom-meta">
+
+
+                                <div class="product-details-share">
+
+                                    <ul>
+
+                                        {% if  product.total_like == True %}
+                                            <li>
+
+                                                {% if request.user.is_authenticated %}
+
+                                                    <a href="{% url 'main:product_like' product.id %}">
+                                                        <i style="font-size: 30px" class="fa fa-heart"></i>
+                                                        &nbsp;&nbsp;<strong
+                                                            style="font-size: 20px">{{ product.total_like }}</strong>
+                                                    </a>
+
+                                                {% else %}
+                                                    <div data-toggle="tooltip" data-placement="left"
+                                                         title="برای لایک کردن باید وارد شوید">
+                                                        <i style="font-size: 30px" class="fa fa-heart"></i>
+                                                        &nbsp;&nbsp;<strong
+                                                            style="font-size: 20px">{{ product.total_like }}</strong>
+                                                    </div>
+                                                {% endif %}
+                                            </li>
+                                        {% else %}
+                                            {% if request.user.is_authenticated %}
+                                                <li>
+                                                    <a href="{% url 'main:product_like' product.id %}">
+                                                        <i style="font-size: 30px" class="far fa-heart"></i>
+                                                        &nbsp;&nbsp;<strong
+                                                            style="font-size: 20px">{{ product.total_like }}</strong>
+
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>
+                                                    <div data-toggle="tooltip" data-placement="left"
+                                                         title="برای لایک کردن باید وارد شوید">
+                                                        <i style="font-size: 30px" class="far fa-heart"></i>
+                                                        &nbsp;&nbsp;<strong
+                                                            style="font-size: 20px">{{ product.total_like }}</strong>
+                                                    </div>
+                                                </li>
+                                            {% endif %}
+                                        {% endif %}
+                                    </ul>
+
+                                </div>
+                                <br/>
+                                <br/>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="product-desc-wrap">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link active" id="description-tab" data-toggle="tab"
+                                       href="#description" role="tab" aria-controls="description"
+                                       aria-selected="true">توضیحات راهنما </a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" id="reviews-tab" data-toggle="tab" href="#reviews" role="tab"
+                                       aria-controls="reviews"
+                                       aria-selected="false">نظرات </a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="description" role="tabpanel"
+                                     aria-labelledby="description-tab">
+                                    <div class="product-desc-title mb-30">
+                                        <h4 class="title">اطلاعات تکمیلی :</h4>
+                                    </div>
+                                    <p>{{ product.description | safe }}</p>
+                                    <div class="color-size-info">
+                                        {#                                        <ul>#}
+                                        {#                                            <li><span>رنگ :</span> مشکی، خاکستری</li>#}
+                                        {#                                            <li><span>اندازه :</span> {{ product.variant.size_variant }}</li>#}
+                                        {#                                        </ul>#}
+                                    </div>
+                                    <div class="additional-table">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                                <tbody>
+                                                <tr>
+                                                    <th scope="row">شماره اندازه ها</th>
+                                                    <td>28</td>
+                                                    <td>49</td>
+                                                    <td>36</td>
+                                                    <td>55</td>
+                                                    <td>44</td>
+                                                    <td>34</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">کشش کمر</th>
+                                                    <td>19</td>
+                                                    <td>38</td>
+                                                    <td>31</td>
+                                                    <td>55</td>
+                                                    <td>44</td>
+                                                    <td>34</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">لگن (7 سانتی متر زیر از کمر)</th>
+                                                    <td>11</td>
+                                                    <td>18</td>
+                                                    <td>21</td>
+                                                    <td>55</td>
+                                                    <td>44</td>
+                                                    <td>34</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">طول (بیرونی)</th>
+                                                    <td>28</td>
+                                                    <td>31</td>
+                                                    <td>19</td>
+                                                    <td>55</td>
+                                                    <td>44</td>
+                                                    <td>34</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+                                    <div class="blog-comment mb-60">
+                                        {% if  user.is_authenticated %}
+                                            <div class="comment-reply-box">
+                                                <h5 class="b-details-title mb-35">ارسال نظر</h5>
+                                                <form action="{% url 'main:comment' product.id %}" method="post"
+                                                      class="comment-form review-form">{% csrf_token %}
+                                                    <span>نظر شما *</span>
+                                                    <textarea
+                                                            name="comment" id="comment"
+                                                            required
+                                                            oninvalid="setCustomValidity('نظر خود را درج کنید')"></textarea>
+                                                    <button class="btn">ارسال</button>
+                                                </form>
+                                            </div>
+                                        {% else %}
+                                            <p style="color: #0056b3; text-align: center; "><strong>برای نظر دادن باید
+                                                وارد سایت
+                                                شوید</strong></p>
+                                        {% endif %}
+                                        <br/>
+                                        <hr/>
+                                        <h5 class="b-details-title mb-35"> نظرات ({{ comment.count }}) : </h5>
+                                        <ul>
+                                            {% if comment %}
+                                                {% for com in comment %}
+                                                    <li>
+                                                        <div class="single-comment">
+                                                            <div class="comment-avatar-img">
+                                                                <img src="{% static 'main/img/slider/12.jpg' %}"
+                                                                     alt="img">
+                                                            </div>
+                                                            <div class="comment-text">
+                                                                <div class="comment-avatar-info">
+                                                                    <span class="comment-date">{{ com.create | naturalday }}</span>
+                                                                    <h6 style="color: grey">{{ com.user.first_name }} {{ com.user.last_name }}:</h6>
+                                                                </div>
+                                                                <p style="font-size: large">
+                                                                    <strong>{{ com.comment }}</strong></p>
+                                                                <br/>
+                                                                {% if  user.is_authenticated %}
+                                                                    <form method="post"
+                                                                          action="{% url 'main:replay' product.id com.id %}">{% csrf_token %}
+                                                                        <textarea placeholder="پاسخ  به این کامنت ..."
+                                                                                  name="comment" id="comment" cols="70"
+                                                                                  rows="4" required
+                                                                                  oninvalid="setCustomValidity('نظر خود را درج کنید')"></textarea>
+                                                                        <div class="mt-2">
+                                                                            <button type="submit" class=" btn-info">
+                                                                                Replay
+                                                                            </button>
+                                                                        </div>
+                                                                    </form>
+                                                                {% endif %}
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    {% for data in com.comment_reply.all %}
+                                                        <li class="comment-reply">
+                                                            <div class="single-comment">
+                                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                <strong
+                                                                        style="color: red">Replay</strong>
+                                                                <div class="comment-avatar-img">
+                                                                    <img src="{% static 'main/img/slider/12.jpg' %}"
+                                                                         alt="img">
+                                                                </div>
+                                                                <div class="comment-text">
+                                                                    <div class="comment-avatar-info">
+                                                                        <span class="comment-date">{{ com.create | naturalday }}</span>
+                                                                        <h6 style="color: gray "> {{ com.user.first_name }} {{ com.user.last_name }}:</h6>
+                                                                    </div>
+                                                                    <p style="font-size: large">
+                                                                        <strong>{{ data.comment }}</strong>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    {% endfor %}
+                                                {% endfor %}
+                                            {% else %}
+                                                <p class="adara-review-title">اولین نفری باشید که دیدگاهی را ارسال می
+                                                    کنید برای
+                                                    “آدارا”</p>
+                                            {% endif %}
+                                        </ul>
+                                    </div>
+                                    {#                            {% if comment %}#}
+                                    {#                                {% for com in comment %}#}
+                                    {#                                    <div class="col-9">#}
+                                    {#                                        <h5> {{ com.user.first_name }} {{ com.user.last_name }}:</h5>#}
+                                    {#                                        <p>{{ com.comment }}</p>#}
+                                    {#                                    </div>#}
+                                    {#                                    <form method="post" action="{% url 'main:replay' product.id com.id %}">{% csrf_token %}#}
+                                    {#                                    <textarea name="comment" id="comment" cols="30" rows="4" ></textarea>#}
+                                    {#                                    <div class="mt-2">#}
+                                    {#                                         <button type="submit" class=" btn-info">پاسخ به این کامنت</button>#}
+                                    {#                                    </div>#}
+                                    {#                                    </form>#}
+                                    {#                                    {% for data in com.comment_reply.all %}#}
+                                    {#                                        <h5> {{ com.user.first_name }} {{ com.user.last_name }}:</h5>#}
+                                    {#                                        <p>{{ data.comment }}</p>#}
+                                    {#                                    {% endfor %}#}
+                                    {#                                {% endfor %}#}
+                                    {#                                                {% else %}#}
+                                    {#                                                    <p class="adara-review-title">اولین نفری باشید که دیدگاهی را ارسال می کنید برای#}
+                                    {#                                                        “آدارا”</p>#}
+                                    {#                                                {% endif %}#}
+                                    {#                                                <hr style="color: black;">#}
+                                    {#                                                {% if  user.is_authenticated %}#}
+                                    {##}
+                                    {##}
+                                    {#                                                    <form action="{% url 'main:comment' product.id %}" method="post"#}
+                                    {#                                                          class="comment-form review-form">{% csrf_token %}#}
+                                    {#                                                        <span>نظر شما *</span>#}
+                                    {##}
+                                    {#                                                        {{ comment_form.as_p }}#}
+                                    {##}
+                                    {#                                                        <button class="btn">ارسال</button>#}
+                                    {#                                                    </form>#}
+                                    {#                                                {% else %}#}
+                                    {##}
+                                    {#                                                    <p style="color: #0056b3; text-align: center; "><strong>برای نظر دادن باید وارد سایت#}
+                                    {#                                                        شوید</strong></p>#}
+                                    {#                                                {% endif %}#}
+                                    {#                                            </div>#}
+                                    {#                                        {% endfor %}#}
+                                    {#                                        </div>#}
+                                    {#                                        </div>#}
+                                </div>
+                            </div>
+                            {% block script %}
+                                {% if  product.status != 'None' %}
+                                    <script>
+                                        var ctx = document.getElementById('myChart').getContext('2d');
+                                        var myChart = new Chart(ctx, {
+                                            type: 'bar',
+                                            data: { labels: [
+                                                {% for i in updates %}{% if variants.id == i.variant_id %}
+                                                '{{ i.jpublish }}' {% endif %},
+                                        {% endfor %}],
+                                        datasets: [{
+                                            label: {{ product.color }} 'نمودار تغییرات قیمت (تومان)',
+                                            data: [
+                                                {% for i in updates %} {% if variants.id == i.variant_id %} {{ i.unit_price }} {% endif %}, {% endfor %}],
+                                            backgroundColor: [
+                                                'rgba(255, 99, 132, 0.2)',
+                                                'rgba(54, 162, 235, 0.2)',
+                                                'rgba(255, 206, 86, 0.2)',
+                                                'rgba(75, 192, 192, 0.2)',
+                                                'rgba(153, 102, 255, 0.2)',
+                                                'rgba(255, 159, 64, 0.2)'
+                                            ],
+                                            borderColor: [
+                                                'rgba(255, 99, 132, 1)',
+                                                'rgba(54, 162, 235, 1)',
+                                                'rgba(255, 206, 86, 1)',
+                                                'rgba(75, 192, 192, 1)',
+                                                'rgba(153, 102, 255, 1)',
+                                                'rgba(255, 159, 64, 1)'
+                                            ],
+                                            borderWidth: 1
+                                        }]
+                                        },
+                                        options: {
+                                            scales: {
+                                                yAxes: [{
+                                                    ticks: {
+                                                        beginAtZero: true
+                                                    }
+                                                }]
+                                            }
+                                        }
+                                        })
+                                        ;
+                                    </script>
+                                {% else %}
+                                    <script>
+                                        var ctx = document.getElementById('myChart').getContext('2d');
+                                        var myChart = new Chart(ctx, {
+                                            type: 'bar',
+                                            data: {
+                                                labels: [
+                                                    {% for i in update %} '{{ i.jpublish }}' , {% endfor %}],
+                                                datasets: [{
+                                                    label: {{ product.color }} 'نمودار تغییرات قیمت (تومان)',
+                                                    data: [{% for i in update %} {{ i.unit_price }} , {% endfor %}],
+                                                    backgroundColor: [
+                                                        'rgba(255, 99, 132, 0.2)',
+                                                        'rgba(54, 162, 235, 0.2)',
+                                                        'rgba(255, 206, 86, 0.2)',
+                                                        'rgba(75, 192, 192, 0.2)',
+                                                        'rgba(153, 102, 255, 0.2)',
+                                                        'rgba(255, 159, 64, 0.2)'
+                                                    ],
+                                                    borderColor: [
+                                                        'rgba(255, 99, 132, 1)',
+                                                        'rgba(54, 162, 235, 1)',
+                                                        'rgba(255, 206, 86, 1)',
+                                                        'rgba(75, 192, 192, 1)',
+                                                        'rgba(153, 102, 255, 1)',
+                                                        'rgba(255, 159, 64, 1)'
+                                                    ],
+                                                    borderWidth: 1
+                                                }]
+                                            },
+                                            options: {
+                                                scales: {
+                                                    yAxes: [{
+                                                        ticks: {
+                                                            beginAtZero: true
+                                                        }
+                                                    }]
+                                                }
+                                            }
+                                        });
+                                    </script>
+                                {% endif %}
+                            {% endblock %}
+                            <div class="row">
+                               <canvas id="myChart" width="400" height="400"></canvas>
+                            </div>
+                            <div class="related-product-wrap">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="related-product-title">
+                                            <h4 class="title">شما نیز ممکن است بپسندید...</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row related-product-active">
+                                    {% for product in similar %}
+                                        <div class="col-xl-3">
+                                            <div class="new-arrival-item text-center">
+                                                <div class="thumb mb-25">
+                                                    {% if product.discount %}
+                                                        <div class="discount-tag">{{ product.discount }}% -</div>
+                                                    {% endif %}
+                                                    {% thumbnail product.image "500x550" crop="center" as img %}
+                                                        <a href="{{ product.get_absolute_url }}">
+                                                            <img src="{{ img.url }}" alt="">
+                                                        </a>
+                                                    {% endthumbnail %}
+                                                    <div class="product-overlay-action">
+                                                        <ul>
+                                                            {% if request.user.is_authenticated %}
+                                                                {% if request.user in product.favourite.all %}
+                                                                    <li>
+                                                                        <a href="{% url 'main:favourite_product' product.id %}"
+                                                                           class="favourite-product fa-btn1" data-id='1'
+                                                                           data-text="remove"><i
+                                                                                class="fa fa-heart test1"
+                                                                                style="color:red"></i></a>
+                                                                    </li>
+                                                                {% else %}
+                                                                    <li>
+                                                                        <a href="{% url 'main:favourite_product' product.id %}"
+                                                                           class="favourite-product fa-btn2" data-id='2'
+                                                                           data-text="add">
+                                                                            <i class="fa fa-heart test2"
+                                                                               style="color:#eee"></i></a>
+                                                                    </li>
+                                                                {% endif %}
+                                                            {% else %}
+                                                                <div data-toggle="tooltip" data-placement="right"
+                                                                     title="برای افزودن به علاقه مندیها باید وارد شوید">
+                                                                    <li>
+                                                                        <i class="fa fa-heart test2"
+                                                                           style="color:#eee"></i>
+                                                                    </li>
+                                                                </div>
+                                                            {% endif %}
+                                                            <li><a href="{{ product.get_absolute_url }}"><i
+                                                                    class="far fa-eye"></i></a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="content">
+                                                    <h5><a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
+                                                    </h5>
+                                                    {% if not product.discount %}
+                                                        <p style="color: orangered"
+                                                           class="price">{{ product.unit_price|intcomma }}<span
+                                                                style="color: orangered">  تومان  </span>
+                                                        </p>
+
+                                                    {% else %}
+                                                        <p class="price">
+                                                            <s style="color: #a7a6a6;">{{ product.unit_price|intcomma }}</s>
+                                                            &nbsp;&nbsp;
+                                                            <span style="color: orangered">{{ product.total_price | intcomma }}  تومان  </span>
+                                                        </p>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        </section>
+        <!-- shop-details-area-end -->
+
+
+    </main>
+    <!-- main-area-end -->
+    <script>
+        $(document).on('click', '.favourite-product', function (e) {
+            e.preventDefault();
+            var selector = $(this)
+            var data_id = $(this).data("id")
+            var likeText = $(this).data("text");
+            var trim = $.trim(likeText)
+            console.log(data_id + " " + likeText)
+            $.ajax({
+                url: $(this).attr('href'),
+                type: 'GET',
+                data: $(this).serialize(),
+                dataType: 'json',
+            });
+            if (trim === 'add') {
+                selector.find("i").css({
+                    "color": "red"
+                });
+                selector.data("text", "remove")
+            } else {
+                selector.find("i").css({
+                    "color": "#eee"
+                });
+                selector.data("text", "add")
+            }
+        });
+    </script>
+
+{% endblock %}

@@ -1,0 +1,202 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block main %}
+
+    <!-- main-area -->
+    <main>
+
+        <!-- breadcrumb-area -->
+        {#        <section class="breadcrumb-area breadcrumb-bg" data-background="img/bg/breadcrumb_bg03.jpg">#}
+        {#            <div class="container">#}
+        {#                <div class="row">#}
+        {#                    <div class="col-12">#}
+        {#                        <div class="breadcrumb-content">#}
+        {#                            <h2>صفحه سبد خرید</h2>#}
+        {##}
+        {#                        </div>#}
+        {#                    </div>#}
+        {#                </div>#}
+        {#            </div>#}
+        {#        </section>#}
+        <!-- breadcrumb-area-end -->
+
+        <!-- cart-area -->
+
+        <div class="cart-area pt-100 pb-100">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="cart-wrapper">
+                            <div class="table-responsive">
+                                <table class="table mb-0">
+                                    <thead>
+                                    <tr>
+                                        <th class="product-thumbnail">#</th>
+                                        <th class="product-name">محصول</th>
+                                        <th class="product-name">مشخصات</th>
+                                        <th class="product-price"> قیمت واحد</th>
+
+                                        <th class="product-quantity">تعداد</th>
+                                        {#                                        <th class="product-subtotal">مجموع</th>#}
+                                        <th class="product-delete"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    {% for c in cart %}
+                                        <tr>
+                                            <td>{{ forloop.counter }} )</td>
+                                            {#                                            <td class="product-thumbnail"><img style="margin: 50px -5px" width="100%"#}
+                                            {#                                                                               src="{{ object.image.url }}"#}
+                                            {#                                                                               alt="Preview image"></td>#}
+                                            <td class="product-name">{{ c.variant.name }}</td>
+                                            <td class="product-name">
+                                                {% if c.variant.size_variant and c.variant.color_variant %}
+                                                    <span>رنگ : {{ c.variant.color_variant }} </span><br/>
+                                                    <span>سایز : {{ c.variant.size_variant }} </span>
+
+                                                {% elif c.variant.size_variant %}
+                                                    <span> سایز : {{ c.variant.size_variant }} </span><br/>
+                                                {% elif c.variant.color_variant %}
+                                                    <span> رنگ : {{ c.variant.color_variant }} </span>
+                                                {% else %}
+                                                    {{ c.variant.name }}
+                                                {% endif %}
+
+                                            </td>
+                                            {% if c.variant.discount %}
+                                                <td class="product-price">
+                                                    <strike>{{ c.variant.unit_price | intcomma }}
+                                                        تومان</strike><br/>{{ c.variant.total_price | intcomma }}
+                                                    تومان
+                                                </td>
+                                            {% else %}
+                                                <td class="product-price">{{ c.variant.unit_price | intcomma }}
+                                                    تومان
+                                                </td>
+                                            {% endif %}
+                                            <td class="product-quantity">
+                                                <div class="cart-plus-minus">
+                                                    <form action="#" class="num-block">
+                                                        <input type="text" id="number{{ c.variant.id }}"
+                                                               value="{{ c.quantity }}"
+                                                               max="{{ c.variant.quantity }}"
+                                                               onclick="add('{{ c.variant.id }}')">
+                                                        <div class="qtybutton-box">
+
+                                                            <span class="plus" onclick="add('{{ c.variant.id }}')"><img
+                                                                    src="{% static 'main/img/icon/plus.png' %}"
+                                                                    alt=""></span>
+                                                            <span class="minus dis"
+                                                                  onclick="remove('{{ c.variant.id }}')"><img
+                                                                    src="{% static 'main/img/icon/minus.png' %}"
+                                                                    alt=""></span>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </td>
+
+
+                                            {#                                                                                        <td class="product-quantity cart-plus-minus">#}
+                                            {#                                                                                            <i class="fa fa-angle-up" onclick="add('{{ c.variant.id }}')"></i>#}
+                                            {#                                                                                            <input type="number" id="number{{ c.variant.id }}"#}
+                                            {#                                                                                                   value="{{ c.quantity }}" max="{{ c.variant.amount }}">#}
+                                            {#                                                                                            <i class="fa fa-angle-down"></i>#}
+                                            {#                                                                                        </td>#}
+                                            {#                                            <td class="product-subtotal"><span>{{ c.variant.total_price|intcomma }}</span></td>#}
+                                            <td class="product-delete"><a
+                                                    href="{% url 'cart:remove' c.variant.id %}"><i
+                                                    class="flaticon-trash"></i></a></td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% if messages %}
+                                <ul class="messages">
+                                    {% for message in messages %}
+                                        {% if message.tags %}
+
+                                            <div class="alert alert-success" role="alert">
+                                                <button type="button" class="close"
+                                                        data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>&nbsp;&nbsp;
+                                                {{ message }}
+
+                                            </div>
+
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                            <div class="cart-total pt-95">
+                                <h3 class="title">مجموع سبد خرید</h3>
+                                <div class="shop-cart-widget">
+                                    <form action="#">
+                                        <ul>
+
+
+                                            <li>قیمت واحد : &emsp;&ensp;&emsp;&ensp;<span id="price">تومان</span>
+                                            </li>
+                                            <li>تعداد :&emsp;&ensp;&emsp;&ensp;&emsp;&ensp;&emsp;&emsp;&ensp;<span
+                                                    id="quantity"></span></li>
+                                            <li>تخفیف :&emsp;&ensp;&emsp;&ensp;&emsp;&ensp;&emsp;&ensp;<span
+                                                    id="discount">تومان</span></li>
+
+                                            <li class="cart-total-amount">جمع کل
+                                                :&emsp;&ensp;&emsp;&ensp;&emsp;&ensp;&emsp;&ensp;<span
+                                                        id="total">تومان</span>
+                                            </li>
+                                        </ul>
+                                        <a href="{% url 'order:information' %}" class="btn">پروسه پرداخت </a>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- cart-area-end -->
+
+    </main>
+    <!-- main-area-end -->
+    <script>
+        function show() {
+            $.ajax({
+                url: "{% url 'cart:show' %}",
+                type: 'GET',
+                success: function (response) {
+                    $("#price").html(response.price);
+                    $("#quantity").html(response.quantity);
+                    $("#discount").html(response.discount);
+                    $("#total").html(response.total);
+                }
+            })
+        }
+
+        show();
+
+        function add(id) {
+            const num = $("#number" + id).val();
+            const num2 = $("#number" + id).attr('max');
+            quantity = 0;
+            quantity += parseInt(num) + 1;
+            if (quantity <= num2) {
+                $("#number" + id).val(quantity);
+                $.ajax({
+                    url: "{% url 'cart:add-single' %}",
+                    type: 'GET',
+                    data: {variant_id: id, quantity: quantity},
+                    success: function (data) {
+                        show();
+                    }
+
+                })
+
+            }
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'registration/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block register %}
+
+    <div class="wrapper" style="background-image:url({% static 'registration/images/bg-registration-form-1.jpg' %})">
+        <div class="inner">
+            <div class="image-holder">
+                <img src="{% static 'registration/images/registration-form-1.jpg' %}" alt="">
+            </div>
+
+            <form method="post" action="">{% csrf_token %}
+                <h3>ورود</h3>
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            {% if message.tags %}
+                                <div class="alert alert-success" role="alert">
+                                    {{ message }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <div class="form-wrapper">
+                    <strong><label>نام کاربری</label></strong>
+                    {{ form.username | add_class:'form-control input100' }}
+                    <i class="zmdi zmdi-account"></i>
+                </div>
+
+                <div class="form-wrapper">
+                    <strong><label>رمز عبور</label></strong>
+                    {{ form.password | add_class:'form-control input100' }}
+                    <i class="zmdi zmdi-lock"></i>
+                </div>
+                <br/>
+                <span style="color: blue">ثبت نام به معنی پذیرش قوانین و مقررات سایت می‌باشد </span>
+                <br/>
+                <br/>
+                <span style="color: #491217">حساب ندارید؟! <a
+                        href="{% url 'account:register' %}">ثبت نام کنید </a> </span>
+
+                <button type="submit">ورود
+                    <i class="zmdi zmdi-arrow-right"></i>
+                </button>
+
+            </form>
+        </div>
+
+    </div>
+{% endblock %}

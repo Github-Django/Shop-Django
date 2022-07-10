@@ -1,0 +1,80 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block main %}
+
+    <!-- main-area -->
+    <main>
+        <!-- cart-area -->
+        <div class="cart-area pt-100 pb-100">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="cart-wrapper">
+                            <div class="table-responsive">
+                                {% if data %}
+                                    <table class="table mb-0">
+                                        <thead>
+                                        <tr>
+                                            <th class="product-thumbnail">#</th>
+                                            <th class="product-name">محصول</th>
+                                            {#                                        <th class="product-name">مشخصات</th>#}
+                                            <th class="product-price"> قیمت واحد</th>
+
+                                            <th class="product-quantity">برند</th>
+                                            {#                                        <th class="product-subtotal">مجموع</th>#}
+                                            <th class="product-delete"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        {% for c in data %}
+                                            <tr>
+                                                <td class="product-thumbnail"><a
+                                                        href="{{ c.product.get_absolute_url }}"><img
+                                                        style="margin: 50px -5px" width="100%"
+                                                        src="{{ c.product.image.url }}"
+                                                        alt="Preview image"></a></td>
+                                                <td class="product-name"><a
+                                                        href="{{ c.product.get_absolute_url }}">{{ c.product.name }}</a>
+                                                </td>
+                                                {#                                            <td class="product-name">#}
+                                                {##}
+                                                {#                                                    <span>رنگ : {{ filter.form.color }} </span><br/>#}
+                                                {#                                                    <span>سایز : {{ c.product.size.name }} </span>#}
+                                                {##}
+                                                {#                                            </td>#}
+                                                {% if c.product.discount %}
+                                                    <td class="product-price">
+                                                        <strike>{{ c.product.unit_price | intcomma }}
+                                                            تومان</strike><br/>{{ c.product.total_price | intcomma }}
+                                                        تومان
+                                                    </td>
+                                                {% else %}
+                                                    <td class="product-price">{{ c.product.unit_price | intcomma }}
+                                                        تومان
+                                                    </td>
+                                                {% endif %}
+                                                <td class="product-price">
+                                                    {{ c.product.brand }}
+                                                </td>
+                                                <td class="product-delete"><a href="{% url 'main:del' c.pk %}"><i
+                                                        class="flaticon-trash"></i></a></td>
+                                            </tr>
+                                        {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                {% else %}
+                                    <h3 style="margin: auto;">لیست مقایسه شما خالی است :(</h3>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- cart-area-end -->
+    </main>
+    <!-- main-area-end -->
+{% endblock %}

@@ -1,0 +1,391 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load ratings %}
+{% load thumbnail %}
+{% load base_tags %}
+{% block main %}
+    <style>.multi-range, .multi-range * {
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+    }
+
+    .multi-range {
+        position: relative;
+        width: 160px;
+        height: 28px;
+        margin: 16px;
+        border: 1px solid #ddd;
+        font-family: monospace;
+    }
+
+    .multi-range > hr {
+        position: absolute;
+        width: 100%;
+        top: 50%;
+    }
+
+    .multi-range > input[type=range] {
+        width: calc(100% - 16px);
+        position: absolute;
+        bottom: 6px;
+        left: 0;
+    }
+
+    .multi-range > input[type=range]:last-of-type {
+        margin-left: 16px;
+    }
+
+    .multi-range > input[type=range]::-webkit-slider-thumb {
+        transform: translateY(-18px);
+    }
+
+    .multi-range > input[type=range]::-webkit-slider-runnable-track {
+        -webkit-appearance: none;
+        height: 0px;
+    }
+
+    .multi-range > input[type=range]::-moz-range-thumb {
+        transform: translateY(-18px);
+    }
+
+    .multi-range > input[type=range]::-moz-range-track {
+        -webkit-appearance: none;
+        height: 0px;
+    }
+
+    .multi-range > input[type=range]::-ms-thumb {
+        transform: translateY(-18px);
+    }
+
+    .multi-range > input[type=range]::-ms-track {
+        -webkit-appearance: none;
+        height: 0px;
+    }
+
+    .multi-range::after {
+        content: attr(data-lbound) ' - ' attr(data-ubound);
+        position: absolute;
+        top: 0;
+        left: 100%;
+        white-space: nowrap;
+        display: block;
+        padding: 0px 4px;
+        margin: -1px 2px;
+        height: 26px;
+        width: auto;
+        border: 1px solid #ddd;
+        font-size: 13px;
+        line-height: 26px;
+    }
+    </style>
+    {#    {% if messages %}#}
+    {#        <ul class="messages">#}
+    {#            {% for message in messages %}#}
+    {#                {% if message.tags %}#}
+    {##}
+    {#                    <div class="alert success-alert" role="alert">#}
+    {#                        <button type="button" class="close"#}
+    {#                                data-dismiss="alert" aria-label="Close">#}
+    {#                            <span aria-hidden="true">&times;</span>#}
+    {#                        </button>&nbsp;&nbsp;#}
+    {#                        {{ message }}#}
+    {##}
+    {#                    </div>#}
+    {##}
+    {#                {% endif %}#}
+    {#            {% endfor %}#}
+    {#        </ul>#}
+    {#    {% endif %}#}
+    <main>
+        <section class="breadcrumb-area breadcrumb-bg"
+                 data-background="{% static  'main/img/bg/breadcrumb_bg04.jpg' %}">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="breadcrumb-content">
+                            <h2>همه محصولات</h2>
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="{% url 'main:home' %}">خانه </a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">فروشگاه</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="shop-area pt-100 pb-100">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-9 col-lg-8">
+                        <div class="shop-top-meta mb-35">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="shop-top-left">
+                                        <ul>
+                                            <li><a href="#"><i class="flaticon-menu"></i> فیلتر </a></li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="shop-top-right">
+                                        <form action="#">
+                                            <input type="submit" style="border-radius: 22px;color: grey;" name="price"
+                                                   value="گران ترین">
+                                            <input type="submit" style="border-radius: 22px;color: grey;" name="price"
+                                                   value="ارزان ترین">
+                                            <input type="submit" style="border-radius: 22px;color: grey;" name="create"
+                                                   value="جدیدترین">
+                                            {#                                           <input type="submit" style="border-radius: 22px;color: grey;" name="create" value="قدیمی ترین">#}
+                                            <input type="submit" style="border-radius: 22px;color: grey;"
+                                                   name="discount" value="بیشترین تخفیف">
+                                            <input type="submit" style="border-radius: 22px;color: grey;"
+                                                   name="total_favourite" value="محبوب ترین">
+                                            <div style="display: none;">
+                                                {{ filter.form.brand }}
+                                                {{ filter.form.size }}
+                                                {{ filter.form.color }}
+                                                {{ filter.form.price_1 }}
+                                                {{ filter.form.price_2 }}
+                                                {{ values }}
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            {% for product in products %}
+                                <div class="col-xl-4 col-sm-6">
+                                    <div class="new-arrival-item text-center mb-50">
+                                        <div class="thumb mb-25">
+                                            {% if product.discount %}
+                                                <div class="discount-tag">{{ product.discount }}% -</div>
+                                            {% endif %}
+                                            {% thumbnail product.image "500x550" crop="center" as img %}
+
+                                                <a href="{{ product.get_absolute_url }}">
+                                                    <img src="{{ img.url }}" alt="">
+                                                </a>
+                                            {% endthumbnail %}
+                                            <div class="product-overlay-action">
+                                                <ul>
+                                                    {% if request.user.is_authenticated %}
+                                                        {% if request.user in product.favourite.all %}
+                                                            <li>
+                                                                <a href="{% url 'main:favourite_product' product.id %}"
+                                                                   class="favourite-product fa-btn1" data-id='1'
+                                                                   data-text="remove"><i class="fa fa-heart test1"
+                                                                                         style="color:red"></i></a>
+                                                            </li>
+                                                        {% else %}
+                                                            <li>
+                                                                <a href="{% url 'main:favourite_product' product.id %}"
+                                                                   class="favourite-product fa-btn2" data-id='2'
+                                                                   data-text="add">
+                                                                    <i class="fa fa-heart test2"
+                                                                       style="color:#eee"></i></a>
+                                                            </li>
+                                                        {% endif %}
+                                                    {% else %}
+                                                        <div data-toggle="tooltip" data-placement="right"
+                                                             title="برای افزودن به علاقه مندیها باید وارد شوید">
+                                                            <li>
+                                                                <i class="fa fa-heart test2" style="color:#eee"></i>
+                                                            </li>
+                                                        </div>
+                                                    {% endif %}
+                                                    <li><a href="{{ product.get_absolute_url }}"><i
+                                                            class="far fa-eye"></i></a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="content">
+                                            <h5><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h5>
+                                            {% if not product.discount %}
+                                                <p style="color: orangered"
+                                                   class="price">{{ product.unit_price|intcomma }}<span
+                                                        style="color: orangered">  تومان  </span>
+                                                </p>
+
+                                            {% else %}
+                                                <p class="price">
+                                                    <s style="color: #a7a6a6;">{{ product.unit_price|intcomma }}</s>
+                                                    &nbsp;&nbsp;
+                                                    <span style="color: orangered">{{ product.total_price | intcomma }}  تومان  </span>
+                                                </p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                        </div>
+
+                        <div class="pagination-wrap">
+                            <ul>
+                                {% if  products.has_previous %}
+                                    <li class="prev"><a
+                                            href="{% filter_url products.previous_page_number 'page' request.GET.urlencode %}">
+                                        قبلی</a>
+                                    </li>
+                                    <li>
+                                        <a href="{% filter_url products.previous_page_number 'page' request.GET.urlencode %}">
+                                            {{ products.previous_page_number }}</a>
+                                    </li>
+                                {% endif %}
+
+
+
+                                <li class="{% if page_number == page_number %} active {% endif %}"><a
+                                        href="{% filter_url products.number 'page' request.GET.urlencode %}">
+                                    {{ products.number }}</a>
+                                </li>
+
+
+
+                                {% if  products.has_next %}
+                                    <li class="next"><a
+                                            href="{% filter_url products.next_page_number 'page' request.GET.urlencode %}">
+                                        {{ products.next_page_number }} </a>
+                                    </li>
+                                    <li class="next"><a
+                                            href="{% filter_url products.next_page_number 'page' request.GET.urlencode %}">
+                                        بعدی </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-lg-4">
+                        <aside class="shop-sidebar">
+
+                            <div class="widget side-search-bar">
+                                <form action="{% url 'main:side' %}">
+                                    <input type="text" name="search" placeholder="جستجو کنید..."
+                                           value="{{ values.keywords }}">
+                                    <button><i class="flaticon-search"></i></button>
+                                </form>
+                            </div>
+                            {#                            <div class="widget">#}
+                            {#                                <h4 class="widget-title">دسته بندی محصولات</h4>#}
+                            {#                                <div class="shop-cat-list">#}
+                            {#                                    <ul>#}
+                            {#                                        <li><a href="#">تجهیزات جانبی </a><span>(6)</span></li>#}
+                            {#                                        <li><a href="#">کامپیوتر </a><span>(4)</span></li>#}
+                            {#                                        <li><a href="#">کووید 19</a><span>(2)</span></li>#}
+                            {#                                        <li><a href="#">الکترونیک </a><span>(6)</span></li>#}
+                            {#                                        <li><a href="#">عینک آفتابی فریم</a><span>(12)</span></li>#}
+                            {#                                        <li><a href="#">مبلمان </a><span>(7)</span></li>#}
+                            {#                                        <li><a href="#">چرم اصل</a><span>(9)</span></li>#}
+                            {#                                    </ul>#}
+                            {#                                </div>#}
+                            {#                            </div>#}
+                            <form action="">
+                                <div class="widget has-border">
+                                    <h4 class="widget-title"> (بر اساس هزار تومان)فیلتر قیمت</h4>
+                                    <div class="price_filter">
+                                        <div class='multi-range' data-lbound='10' data-ubound='50'>
+                                            <hr/>
+                                            <input type='range' name="price_1"
+                                                   min='{{ min_price }}' max="{{ max_price }}" step='5'
+                                                   value="{{ min_price }}"
+                                                   oninput='this.parentNode.dataset.lbound=this.value;'
+                                            />
+                                            <input type='range' name="price_2"
+                                                   min="{{ min_price }}" max='{{ max_price }}' step='5'
+                                                   value="{{ max_price }}"
+                                                   oninput='this.parentNode.dataset.ubound=this.value;'
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="widget">
+                                    <h4 class="widget-title">برند محصولات</h4>
+                                    <div class="sidebar-brand-list">
+                                        <ul>
+                                            <li>{{ filter.form.brand }}</li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="widget has-border">
+                                    <div class="sidebar-product-size mb-30">
+                                        <h4 class="widget-title">اندازه محصولات </h4>
+                                        <div class="shop-size-list">
+                                            <ul>
+                                                <li>{{ filter.form.size }}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="widget has-border">
+                                        <div class="sidebar-product-size mb-30">
+                                            <h4 class="widget-title">رنگ محصولات </h4>
+                                            <div class="shop-size-list">
+                                                <ul>
+                                                    <li>{{ filter.form.color }}</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="display: none;" class="widget has-border">
+
+                                        <ul>
+                                            <li>{{ filter.form.price }}</li>
+                                            <li>{{ filter.form.create }}</li>
+                                            <li>{{ filter.form.discount }}</li>
+                                            <li>{{ filter.form.total_favourite }}</li>
+                                            <li>{{ values }}</li>
+                                        </ul>
+
+
+                                    </div>
+                                    <button type="submit" class="btn badge-primary">اعمال فیلتر</button>
+                                </div>
+                            </form>
+                        </aside>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    <script>
+        $(document).on('click', '.favourite-product', function (e) {
+            e.preventDefault();
+            var selector = $(this)
+            var data_id = $(this).data("id")
+            var likeText = $(this).data("text");
+            var trim = $.trim(likeText)
+            console.log(data_id + " " + likeText)
+            $.ajax({
+                url: $(this).attr('href'),
+                type: 'GET',
+                data: $(this).serialize(),
+                dataType: 'json',
+            });
+            if (trim === 'add') {
+                selector.find("i").css({
+                    "color": "red"
+                });
+                selector.data("text", "remove")
+            } else {
+                selector.find("i").css({
+                    "color": "#eee"
+                });
+                selector.data("text", "add")
+            }
+        });
+    </script>
+
+{% endblock %}

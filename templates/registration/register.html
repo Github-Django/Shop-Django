@@ -1,0 +1,57 @@
+{% extends 'registration/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block register %}
+
+    <div class="wrapper" style="background-image:url({% static 'registration/images/bg-registration-form-1.jpg' %})">
+        <div class="inner">
+            <div class="image-holder">
+
+                <img src="{% static 'registration/images/registration-form-1.jpg' %}" alt="">
+            </div>
+
+            <form method="post" action="">{% csrf_token %}
+
+                <h3>ایجاد حساب کاربری</h3>
+                                {% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <p style="color: #c82333"> {{ error }} </p>
+        {% endfor %}
+    {% endfor %}
+{% endif %}
+                <div class="form-group">
+                    {{ form.last_name | add_class:'form-control input100' }}
+                    {{ form.first_name | add_class:'form-control input100' }}
+
+                </div>
+                <div class="form-wrapper">
+                    {{ form.mobile | add_class:'form-control input100' }}
+                    <i class="zmdi zmdi-phone"></i>
+                </div>
+                <div class="form-wrapper">
+                    {{ form.username | add_class:'form-control input100' }}
+                    <i class="zmdi zmdi-account"></i>
+                </div>
+                <div class="form-wrapper">
+                    {{ form.password_1 | add_class:'form-control input100' }}
+                    <i class="zmdi zmdi-lock"></i>
+                </div>
+                <div class="form-wrapper">
+                    {{ form.password_2 | add_class:'form-control input100' }}
+                    <i class="zmdi zmdi-lock"></i>
+                </div>
+                <span style="color: blue">ثبت نام به معنی پذیرش قوانین و مقررات سایت می‌باشد </span>
+                <br/>
+                <br/>
+                            <span style="color: #491217">حسابی دارید؟! <a href="{% url 'account:login' %}">وارد شوید</a> </span>
+
+                <button type="submit">ایجاد حساب
+                    <i class="zmdi zmdi-arrow-right"></i>
+                </button>
+
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,268 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load thumbnail %}
+{% load ratings %}
+{% block main %}
+{#        {% if messages %}#}
+{#            <ul class="messages">#}
+{#                {% for message in messages %}#}
+{#                    {% if message.tags %}#}
+{#                        <script>alert("{{ message }}")</script> {% endif %}    {% endfor %}#}
+{#            </ul>#}
+{#        {% endif %}#}
+    <!-- main-area -->
+    <main>
+        <!-- category-banner -->
+        <section class="category-banner-area pt-30">
+            <div class="container custom-container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-md-12 col-sm-10">
+                        <div class="cat-banner-item banner-animation mb-20">
+                            <a href="{% url 'main:side' %}"><img
+                                    src="{% static 'main/img/images/cat_banner_img01.jpg' %}"
+                                    alt=""></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-12 col-sm-10">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="cat-banner-item banner-animation mb-20">
+                                    <div class="thumb">
+                                        <a href="http://{{ request.META.HTTP_HOST }}/category/man/"><img
+                                                src="{% static 'main/img/images/cat_banner_img02.jpg' %}"
+                                                alt=""></a>
+                                    </div>
+                                    <div class="content">
+                                        <span>مجموعه جدید </span>
+                                        <h3><a href="http://{{ request.META.HTTP_HOST }}/category/man/">فروشگاه مردانه </a></h3>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="col-md-6">
+                                    <div class="cat-banner-item banner-animation mb-20">
+                                        <div class="thumb">
+                                            <a href="http://{{ request.META.HTTP_HOST }}/category/woman/"><img src="{% static 'main/img/images/cat_banner_img03.jpg' %}" alt=""></a>
+                                        </div>
+                                        <div class="content">
+                                            <span>مجموعه جدید </span>
+                                            <h3><a href="http://{{ request.META.HTTP_HOST }}/category/woman/">زنانه </a></h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="cat-banner-item style-two banner-animation mb-20">
+                                        <div class="thumb">
+                                            <a href="http://{{ request.META.HTTP_HOST }}/products/?total_favourite=%D9%85%D8%AD%D8%A8%D9%88%D8%A8+%D8%AA%D8%B1%DB%8C%D9%86&price_1=&price_2=#"><img src="{% static 'main/img/images/cat_banner_img04.jpg' %}" alt=""></a>
+                                        </div>
+                                        <div class="content">
+                                            <span></span>
+                                            <h3><a href="http://{{ request.META.HTTP_HOST }}/products/?total_favourite=%D9%85%D8%AD%D8%A8%D9%88%D8%A8+%D8%AA%D8%B1%DB%8C%D9%86&price_1=&price_2=#">محبوب ترین محصولات ما </a></h3>
+                                        </div>
+                                    </div>
+                                </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- category-banner-end -->
+
+            <!-- promo-services -->
+            <section class="promo-services pt-50 pb-25">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-3 col-md-6 col-sm-8">
+                            <div class="promo-services-item mb-40">
+                                <div class="icon"><img src="img/icon/promo_icon01.png" alt=""></div>
+                                <div class="content">
+                                    <h6>پرداخت و تحویل</h6>
+                                    <p>تحویل داده می شود ، هنگامی که شما دریافت می رسد</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-8">
+                            <div class="promo-services-item mb-40">
+                                <div class="icon"><img src="img/icon/promo_icon02.png" alt=""></div>
+                                <div class="content">
+                                    <h6>بازگشت محصول</h6>
+                                    <p>خرده فروشی ، فرآیند بازگشت محصول</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-8">
+                            <div class="promo-services-item mb-40">
+                                <div class="icon"><img src="img/icon/promo_icon03.png" alt=""></div>
+                                <div class="content">
+                                    <h6>تضمین بازگشت پول</h6>
+                                    <p>گزینه های شامل 24/7</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-8">
+                            <div class="promo-services-item mb-40">
+                                <div class="icon"><img src="img/icon/promo_icon04.png" alt=""></div>
+                                <div class="content">
+                                    <h6>پشتیبانی با کیفیت</h6>
+                                    <p>پشتیبانی از گزینه های شامل 24/7</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- promo-services-end -->
+
+        <!-- features-product-area -->
+
+
+        <section class="features-products gray-bg pt-95 pb-100">
+            <div class="container custom-container">
+                <div class="row justify-content-center">
+                    <div class="col-xl-4 col-lg-6">
+                        <div class="section-title title-style-two text-center mb-50">
+                            <h3 class="title">جدید‌ترین محصولات ما </h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane show active" id="men" role="tabpanel"
+                         aria-labelledby="men-tab">
+                        <div class="row features-product-active">
+                            {% for product in products %}
+
+                                <div class="col">
+                                    <div class="features-product-item mb-30">
+                                        <div class="features-product-thumb">
+                                            {% if product.discount %}
+                                                <div class="discount-tag">{{ product.discount }}%</div>
+                                            {% endif %}
+                                            {% thumbnail product.image "500x550" crop="center" as img %}
+
+                                                <a href="{{ product.get_absolute_url }}">
+                                                    <img src="{{ img.url }}" alt="">
+                                                </a>
+                                            {% endthumbnail %}
+                                            <div class="product-overlay-action">
+                                                <ul>
+                                                    {% if request.user.is_authenticated %}
+                                                        {% if request.user in product.favourite.all %}
+                                                            <li><a href="{% url 'main:favourite_product' product.id %}"
+                                                                   class="favourite-product fa-btn1" data-id='1'
+                                                                   data-text="remove"><i class="fa fa-heart test1"
+                                                                                         style="color:red"></i></a></li>
+                                                        {% else %}
+                                                            <li><a href="{% url 'main:favourite_product' product.id %}"
+                                                                   class="favourite-product fa-btn2" data-id='2'
+                                                                   data-text="add">
+                                                                <i class="fa fa-heart test2" style="color:#eee"></i></a>
+                                                            </li>
+                                                        {% endif %}
+                                                    {% else %}
+                                                        <div data-toggle="tooltip" data-placement="right"
+                                                             title="برای افزودن به علاقه مندیها باید وارد شوید">
+                                                            <li>
+                                                                <i class="fa fa-heart test2" style="color:#eee"></i>
+                                                            </li>
+                                                        </div>
+                                                    {% endif %}
+                                                    <li><a href="{{ product.get_absolute_url }}"><i
+                                                            class="far fa-eye"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="features-product-content">
+                                            <div class="rating">
+
+                                                {% ratings product %}
+
+                                            </div>
+
+                                            <h5><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h5>
+                                            <br>
+                                            {% if not product.discount %}
+                                                <p style="color: orangered"
+                                                   class="price">{{ product.unit_price|intcomma }}<span
+                                                        style="color: orangered">  تومان  </span>
+                                                </p>
+
+                                            {% else %}
+                                                <p class="price">
+                                                    <s style="color: #a7a6a6;">{{ product.unit_price|intcomma }}</s>
+                                                    &nbsp;&nbsp;
+                                                    <span style="color: orangered">{{ product.total_price | intcomma }}  تومان  </span>
+                                                </p>
+                                            {% endif %}
+                                            <div class="features-product-bottom">
+                                                <ul>
+                                                    <li class="color-option">
+                                                        <span class="gray"></span>
+                                                        <span class="cyan"></span>
+                                                        <span class="orange"></span>
+                                                    </li>
+                                                    <li class="limited-time"><a href="#">پیشنهاد محدود</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="features-product-cart"><a href="{{ product.get_absolute_url }}">دیدن محصول</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <!-- features-product-area-end -->
+
+                <!-- discount-area -->
+                <section class="discount-area discount-bg jarallax parallax-img"
+                         data-background="{% static 'main/img/bg/discount_bg.jpg' %}">
+                    <div class="container">
+                        <div class="row justify-content-center justify-content-lg-start">
+                            <div class="col-lg-6 col-md-10">
+                                <div class="discount-content text-center">
+                                    <div class="icon mb-15"><img src="{% static 'main/img/icon/discount_icon.png' %}" alt="">
+                                    </div>
+                                    <span>محصولات محدود است</span>
+                                    <h2>مجموعه زمستانی فروش پایان فصل تا 30٪</h2>
+                                    <a href="http://{{ request.META.HTTP_HOST }}/products/?discount=%D8%A8%DB%8C%D8%B4%D8%AA%D8%B1%DB%8C%D9%86+%D8%AA%D8%AE%D9%81%DB%8C%D9%81&price_1=&price_2=#" class="btn">اکنون میخرم!</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- discount-area-end -->
+    </main>
+    <!-- main-area-end -->
+    <script>
+        $(document).on('click', '.favourite-product', function (e) {
+            e.preventDefault();
+            var selector = $(this)
+            var data_id = $(this).data("id")
+            var likeText = $(this).data("text");
+            var trim = $.trim(likeText)
+            console.log(data_id + " " + likeText)
+            $.ajax({
+                url: $(this).attr('href'),
+                type: 'GET',
+                data: $(this).serialize(),
+                dataType: 'json',
+            });
+            if (trim === 'add') {
+                selector.find("i").css({
+                    "color": "red"
+                });
+                selector.data("text", "remove")
+            } else {
+                selector.find("i").css({
+                    "color": "#eee"
+                });
+                selector.data("text", "add")
+            }
+        });
+    </script>
+{% endblock %}

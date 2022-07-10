@@ -1,0 +1,126 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block main %}
+    <!-- breadcrumb-area -->
+    <section class="breadcrumb-area breadcrumb-bg" data-background="{% static 'main/img/bg/discount_bg.jpg' %}">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb-content">
+                        <h2>تاریخچه سفارشات</h2>
+                        <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="{% url 'main:home' %}">خانه </a></li>
+                                    <li class="breadcrumb-item"><a href="{% url 'account:profile' %}">پروفایل </a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">تاریخچه سفارشات </li>
+                                </ol>
+                            </nav>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- breadcrumb-area-end -->
+
+    <!-- cart-area -->
+    <main>
+        <div class="cart-area pt-100 pb-100">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="cart-wrapper">
+                            <div class="table-responsive">
+                                <table class="table mb-0">
+                                    <thead>
+                                    <tr>
+                                        <th class="product-thumbnail">#</th>
+                                        <th class="product-thumbnail">شماره فاکتور</th>
+                                        <th class="product-name">محصول</th>
+                                        <th class="product-price"> مبلغ پرداخت شده</th>
+                                        <th class="product-price">تاریخ خرید</th>
+                                        <th class="product-name">آدرس گیرنده</th>
+                                        <th class="product-name"> وضعیت ارسال</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for data in data %}
+                                        {% if data.order.paid == True %}
+                                            <tr>
+                                                <td>{{ forloop.counter }} )</td>
+                                                <td>{{ data.order.code }}</td>
+                                                <td class="product-name">
+                                                    {{ data.variant.name }}
+                                                    <div>
+                                                        {% if data.variant.size_variant and data.variant.color_variant %}
+                                                            <span>رنگ : {{ data.variant.color_variant }} </span><br/>
+                                                            <span>سایز : {{ data.variant.size_variant }} </span>
+
+                                                        {% elif data.variant.size_variant %}
+                                                            <span> سایز : {{ data.variant.size_variant }} </span><br/>
+                                                        {% elif data.variant.color_variant %}
+                                                            <span> رنگ : {{ data.variant.color_variant }} </span>
+                                                        {% else %}
+                                                            {{ data.variant.name }}
+                                                        {% endif %}
+                                                    </div>
+                                                    <div> با تعداد : {{ data.quantity }}  </div>
+
+                                                </td>
+
+                                                {% if data.variant.discount %}
+                                                    <td class="product-price">
+{#                                                        <strike>{{ data.variant.unit_price | intcomma }}تومان</strike>#}
+                                                        <br/>{{ data.order.get_total_price | intcomma }}
+                                                        تومان با تخفیف
+
+                                                    </td>
+                                                {% else %}
+                                                    <td class="product-price">{{ data.variant.unit_price | intcomma }}
+                                                        تومان
+                                                        <br/>
+                                                    </td>
+
+                                                {% endif %}
+                                                <td class="product-price">
+                                                    {{ data.order.jpublish }}
+
+                                                </td>
+                                                <td class="product-name">
+                                                    <div> {{ data.order.user.first_name }} {{ data.order.user.last_name }}</div>
+                                                    {{ data.order.ostan }}
+                                                    - {{ data.order.shahrestan }} - {{ data.order.address }}
+                                                    <div> کد پستی: {{ data.order.postalcode }}</div>
+                                                    <div> موبایل: {{ data.order.user.mobile }}</div>
+
+
+                                                </td>
+                                                <td class="product-quantity">
+                                                    {% if data.order.tracking_post %}
+                                                        <i style="color: green" class='fa fa-check'> ارسال شده</i>
+                                                        <div> کد رهگیری :</div>
+                                                        <div>{{ data.order.tracking_post }}</div>
+                                                    {% else %}
+                                                        <i style="color: green" class='fa fa-spinner'> درحال
+                                                            ارسال</i>
+
+                                                    {% endif %}
+                                                </td>
+                                                <td class="product-delete">
+
+
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

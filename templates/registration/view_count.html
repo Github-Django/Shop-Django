@@ -1,0 +1,166 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load ratings %}
+{% load thumbnail %}
+{% load base_tags %}
+{% block main %}
+
+    <!-- main-area -->
+    <main>
+
+        <!-- breadcrumb-area -->
+        <section class="breadcrumb-area breadcrumb-bg" data-background="{% static 'main/img/bg/breadcrumb_bg03.jpg' %}">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="breadcrumb-content">
+                            <h2>10 بازدید آخر شما از محصولات</h2>
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="{% url 'main:home' %}">خانه </a></li>
+                                    <li class="breadcrumb-item"><a href="{% url 'account:profile' %}">پروفایل </a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">10 بازدید آخر </li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- breadcrumb-area-end -->
+
+        <!-- shop-area -->
+        <section class="shop-area pt-95 pb-100">
+            <div class="container">
+                {#                <div class="shop-top-meta mb-35">#}
+                {#                    <div class="row">#}
+                {#                        <div class="col-md-6">#}
+                {#                            <div class="shop-top-left">#}
+                {#                                <ul>#}
+                {#                                    <li><a href="#"><i class="flaticon-menu"></i> فیلتر </a></li>#}
+                {#                                    <li>نمایش 1-9 از 80 نتیجه</li>#}
+                {#                                </ul>#}
+                {#                            </div>#}
+                {#                        </div>#}
+                {#                        <div class="col-md-6">#}
+                {#                            <div class="shop-top-right">#}
+                {#                                <form action="#">#}
+                {#                                    <select name="select">#}
+                {#                                        <option value="">مرتب سازی بر اساس جدید بودن</option>#}
+                {#                                        <option>حمل رایگان</option>#}
+                {#                                        <option>بهترین مسابقه</option>#}
+                {#                                        <option>موارد جدید</option>#}
+                {#                                        <option>اندازه A - Z</option>#}
+                {#                                    </select>#}
+                {#                                </form>#}
+                {#                                <div class="shop-search"><a href="#"><i class="flaticon-search"></i></a></div>#}
+                {#                            </div>#}
+                {#                        </div>#}
+                {#                    </div>#}
+                {#                </div>#}
+                {##}
+                {##}
+                <div class="row">
+                    {% if view %}
+                        {% for product in view %}
+                            <div class="col-xl-3 col-lg-4 col-sm-6">
+                                <div class="new-arrival-item text-center mb-50">
+                                    <div class="thumb mb-25">
+                                        {% if product.discount %}
+                                            <div class="discount-tag">{{ product.discount }}% -</div>
+                                        {% endif %}
+                                        {% thumbnail product.image "500x700" crop="center" as img %}
+                                            <a href="{{ product.get_absolute_url }}">
+                                                <img src="{{ img.url }}" alt="">
+                                            </a>
+                                        {% endthumbnail %}
+                                        <div class="product-overlay-action">
+                                            <ul>
+                                                {% if request.user.is_authenticated %}
+                                                    {% if request.user in product.favourite.all %}
+                                                        <li>
+                                                            <a href="{% url 'main:favourite_product' product.id %}"
+                                                               class="favourite-product fa-btn1" data-id='1'
+                                                               data-text="remove"><i class="fa fa-heart test1"
+                                                                                     style="color:red"></i></a>
+                                                        </li>
+                                                    {% else %}
+                                                        <li>
+                                                            <a href="{% url 'main:favourite_product' product.id %}"
+                                                               class="favourite-product fa-btn2" data-id='2'
+                                                               data-text="add">
+                                                                <i class="fa fa-heart test2"
+                                                                   style="color:#eee"></i></a>
+                                                        </li>
+                                                    {% endif %}
+                                                {% else %}
+                                                    <div data-toggle="tooltip" data-placement="right"
+                                                         title="برای افزودن به علاقه مندیها باید وارد شوید">
+                                                        <li>
+                                                            <i class="fa fa-heart test2" style="color:#eee"></i>
+                                                        </li>
+                                                    </div>
+                                                {% endif %}
+                                                <li><a href="{{ product.get_absolute_url }}"><i
+                                                        class="far fa-eye"></i></a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="content">
+                                        <h5><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h5>
+                                        {% if not product.discount %}
+                                            <p style="color: orangered"
+                                               class="price">{{ product.unit_price|intcomma }}<span
+                                                    style="color: orangered">  تومان  </span>
+                                            </p>
+
+                                        {% else %}
+                                            <p class="price">
+                                                <s style="color: #a7a6a6;">{{ product.unit_price|intcomma }}</s>
+                                                &nbsp;&nbsp;
+                                                <span style="color: orangered">{{ product.total_price | intcomma }}  تومان  </span>
+                                            </p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <h3 style="margin: auto;">لیست علاقه مندی شما خالی است :(</h3>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+        <!-- shop-area-end -->
+
+    </main>
+    <script>
+        $(document).on('click', '.favourite-product', function (e) {
+            e.preventDefault();
+            var selector = $(this)
+            var data_id = $(this).data("id")
+            var likeText = $(this).data("text");
+            var trim = $.trim(likeText)
+            console.log(data_id + " " + likeText)
+            $.ajax({
+                url: $(this).attr('href'),
+                type: 'GET',
+                data: $(this).serialize(),
+                dataType: 'json',
+            });
+            if (trim === 'add') {
+                selector.find("i").css({
+                    "color": "red"
+                });
+                selector.data("text", "remove")
+            } else {
+                selector.find("i").css({
+                    "color": "#eee"
+                });
+                selector.data("text", "add")
+            }
+        });
+    </script>
+{% endblock %}

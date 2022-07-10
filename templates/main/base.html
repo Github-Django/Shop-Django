@@ -1,0 +1,343 @@
+<!doctype html>
+{% load static %}
+{% load base_tags %}
+<html class="no-js" lang="">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>آدارا - قالب فروشگاهی چند منظوره و مدرن HTML </title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'main/img/favicon.png' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="{% static 'main/css/reset.css' %}"> <!-- CSS reset -->
+    <link rel="stylesheet" href="{% static 'main/css/style2.css' %}"> <!-- Resource style -->
+    <script src="{% static 'main/js/modernizr.js' %}"></script> <!-- Modernizr -->
+    <!-- Place favicon.ico in the root directory -->
+    <!-- CSS here -->
+    <link rel="stylesheet" href="{% static 'main/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/animate.min.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/fontawesome-all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/jquery.mCustomScrollbar.min.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/swiper-bundle.min.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/jquery-ui.min.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/nice-select.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/jarallax.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/flaticon.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/odometer.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/aos.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/slick.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/default.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/responsive.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/rtl.css' %}">
+    <link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
+    <script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+            integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js"
+            integrity="sha512-sW/w8s4RWTdFFSduOTGtk4isV1+190E/GghVffMA9XczdJ2MDzSzLEubKAs5h0wzgSJOQTRYyaz73L3d6RtJSg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css"/>
+</head>
+<body>
+<!-- preloader  -->
+<div id="preloader">
+    <div id="ctn-preloader" class="ctn-preloader">
+        <div class="animation-preloader">
+            <div class="spinner"></div>
+        </div>
+        <div class="loader">
+            <div class="row">
+                <div class="col-3 loader-section section-left">
+                    <div class="bg"></div>
+                </div>
+                <div class="col-3 loader-section section-left">
+                    <div class="bg"></div>
+                </div>
+                <div class="col-3 loader-section section-right">
+                    <div class="bg"></div>
+                </div>
+                <div class="col-3 loader-section section-right">
+                    <div class="bg"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- preloader end -->
+
+<!-- Scroll-top -->
+<button class="scroll-top scroll-to-target" data-target="html">
+    <i class="fas fa-angle-up"></i>
+</button>
+<!-- Scroll-top-end-->
+
+<!-- header-area -->
+<header>
+    <div class="header-top-wrap">
+        <div class="container custom-container">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-xl-3 col-lg-4 d-none d-lg-block">
+                    <div class="logo">
+                        <a href="{% url 'main:home' %}"><img src="{% static 'main/img/logo/logo.png' %}" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-5 col-md-6">
+                    {#                    <div class="header-top-offer">#}
+                    {#                        <p>تابستان فروش تا <span>70% تخفیف.</span> اکنون میخرم!</p>#}
+                    {#                    </div>#}
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="header-top-action">
+                        <ul>
+                            {% if user.is_authenticated %}
+                                <li class="sign-in"><a class="header-profile flaticon-user"
+                                                       href="{% url 'account:profile' %}"> مشاهده پروفایل </a>
+                                </li>
+
+
+                                <li class="sign-in"><a href="{% url 'account:logout' %}">خروج</a></li>
+
+                            {% else %}
+                                <li class="sign-in"><a href="{% url 'account:login' %}">ورود</a></li>
+
+                            {% endif %}
+                            <li class="wish-list"><a href="{% url 'main:favourite' %}"><i
+                                    class="flaticon-heart-shape-outline"></i></a>
+                            </li>
+                            <li class="header-shop-cart"><a href="{% url 'cart:details' %}"><i
+                                    class="flaticon-shopping-bag"></i><span>{{ request.session.cart.keys | length }}</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="sticky-header" class="main-header menu-area black-bg">
+        <div class="container custom-container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="mobile-nav-toggler"><i class="fas fa-bars"></i></div>
+                    <div class="menu-wrap">
+                        <nav class="menu-nav show">
+                            <div class="logo d-block d-lg-none">
+                                <a href="{% url 'main:home' %}" class="main-logo"><img
+                                        src="{% static 'main/img/logo/w_logo.png' %}" alt="Logo"></a>
+                                <a href="{% url 'main:home' %}" class="sticky-logo"><img
+                                        src="{% static 'main/img/logo/logo.png' %}" alt="Logo"></a>
+                            </div>
+                            {% category_navbar %}
+                            <div class="navbar-wrap main-menu d-none d-lg-flex">
+                                <ul class="navigation">
+                                    <li class="menu-item-has-children"><a href="{% url 'main:home' %}">خانه </a>
+                                    </li>
+                                    <li class="has--mega--menu"><a href="javascript:">فروشگاه </a>
+                                        <ul class="mega-menu">
+                                            <li class="mega-menu-wrap">
+                                                <ul class="mega-menu-col">
+                                                    <li class="mega-title"><a href="javascript:">صفحات
+                                                        فروشگاه </a></li>
+                                                    <li><a href="{% url 'main:side' %}">فروشگاه</a></li>
+                                                    <li><a href="{% url 'cart:details' %}">صفحه سبد خرید</a></li>
+                                                    <li><a href="{% url 'main:favourite' %}">لیست علاقه مندی ها</a></li>
+                                                    <li><a href="{% url 'main:show' %}">مقایسه محصولات</a></li>
+                                                </ul>
+                                                <ul class="mega-menu-col">
+
+                                                </ul>
+                                                <ul class="mega-menu-col sub-cat-post">
+                                                    <li>
+                                                        <a href="http://{{ request.META.HTTP_HOST }}/category/man/">
+                                                            <img
+                                                                    src="{% static 'main/img/product/sub_menu_img01.jpg' %}"
+                                                                    alt="">
+                                                            <span class="btn">فروشگاه مردانه </span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                                <ul class="mega-menu-col sub-cat-post">
+                                                    <li>
+                                                        <a href="http://{{ request.META.HTTP_HOST }}/category/woman/">
+                                                            <img
+                                                                    src="{% static 'main/img/product/sub_menu_img02.jpg' %}"
+                                                                    alt="">
+                                                            <span class="btn">فروشگاه زنانه</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="header-action d-none d-md-block">
+                                <ul>
+                                    {#                                    <li class="shipping-offer">ارسال رایگان با سفارش <span>39000 تومان +</span></li>#}
+                                    <li class="header-search"><a href="#" data-toggle="modal"
+                                                                 data-target="#search-modal"><i
+                                            class="flaticon-search-interface-symbol"></i></a></li>
+                                    <li class="sidebar-toggle-btn"><a href="#" class="navSidebar-button"><img
+                                            src="{% static 'main/img/icon/sidebar_toggle_icon.png' %}" alt=""></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </nav>
+                    </div>
+                    <!-- Mobile Menu  -->
+                    <div class="mobile-menu">
+                        <div class="close-btn"><i class="flaticon-targeting-cross"></i></div>
+                        <nav class="menu-box">
+                            <div class="nav-logo"><a href="{% url 'main:home' %}"><img
+                                    src="{% static 'main/img/logo/logo.png' %}"
+                                    alt="" title=""></a>
+                            </div>
+                            <div class="menu-outer">
+                                <ul class="navigation">
+                                    <li class="active menu-item-has-children"><a href="{% url 'main:home' %}">خانه </a>
+                                    </li>
+                                    <li class="menu-item-has-children"><a href="javascript:">فروشگاه </a>
+                                        <ul class="mega-menu-col">
+                                            <li><a href="{% url 'main:side' %}">فروشگاه</a></li>
+                                            <li><a href="{% url 'cart:details' %}">صفحه سبد خرید</a></li>
+                                            <li><a href="{% url 'main:favourite' %}">لیست علاقه مندی ها</a></li>
+                                            <li><a href="{% url 'main:show' %}">مقایسه محصولات</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="social-links">
+                                <ul class="clearfix">
+                                    <li><a href="#"><span class="fab fa-twitter"></span></a></li>
+                                    <li><a href="#"><span class="fab fa-facebook-square"></span></a></li>
+                                    <li><a href="#"><span class="fab fa-pinterest-p"></span></a></li>
+                                    <li><a href="#"><span class="fab fa-instagram"></span></a></li>
+                                    <li><a href="#"><span class="fab fa-youtube"></span></a></li>
+                                </ul>
+                            </div>
+                        </nav>
+                    </div>
+                    <div class="menu-backdrop"></div>
+                    <!-- End Mobile Menu -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Search -->
+    <div class="modal fade" id="search-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="{% url 'main:side' %}">
+                    <input type="text" name="search" placeholder="جستجو کنید..." value="{{ values.keywords }}">
+                    <button><i class="flaticon-search"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Search-end -->
+
+
+</header>
+<!-- header-area-end -->
+
+{% block main %}
+{% endblock %}
+{% block script %}
+{% endblock %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- footer-area -->
+<footer class="dark-bg pt-55 pb-80">
+    <div class="container">
+        <div class="footer-top-wrap">
+            <div class="row">
+                <div class="col-12">
+                    <div class="footer-logo">
+                        <a href="index.html"><img src="{% static 'main/img/logo/w_logo.png' %}" alt=""></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-middle-wrap">
+            <div class="row">
+                <div class="col-12">
+                    <div class="footer-link-wrap">
+                        <nav class="menu-links">
+                            <ul>
+                                <li><a href="{% url 'main:side' %}">فروشگاه </a></li>
+
+
+
+                            </ul>
+                        </nav>
+                        <div class="footer-social">
+                            <ul>
+                                <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                <li><a href="#"><i class="fab fa-youtube"></i></a></li>
+                                <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                                <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                                <li><a href="#"><i class="fab fa-google"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="copyright-wrap">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="copyright-text">
+                        <p>&copy; 2022 <a href="http://alimovhedi.ir/">Ali Movahedi &copy; Website Django</a></p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="pay-method-img">
+                        <img src="{% static 'main/img/images/payment_method_img.png' %}" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer-area-end -->
+
+
+<!-- JS here -->
+<script data-fasync="false"
+        src="{% static 'main/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js' %}"></script>
+<script src="{% static 'main/js/vendor/jquery-3.5.0.min.js' %}"></script>
+<script src="{% static 'main/js/popper.min.js' %}"></script>
+<script src="{% static 'main/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'main/js/isotope.pkgd.min.js' %}"></script>
+<script src="{% static 'main/js/imagesloaded.pkgd.min.js' %}"></script>
+<script src="{% static 'main/js/jquery.magnific-popup.min.js' %}"></script>
+<script src="{% static 'main/js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
+<script src="{% static 'main/js/jquery.nice-select.min.js' %}"></script>
+<script src="{% static 'main/js/jquery.countdown.min.js' %}"></script>
+<script src="{% static 'main/js/owl.carousel.min.js' %}"></script>
+<script src="{% static 'main/js/jquery.odometer.min.js' %}"></script>
+<script src="{% static 'main/js/swiper-bundle.min.js' %}"></script>
+<script src="{% static 'main/js/jarallax.min.js' %}"></script>
+<script src="{% static 'main/js/jquery.appear.js' %}"></script>
+<script src="{% static 'main/js/slick.min.js' %}"></script>
+<script src="{% static 'main/js/ajax-form.js' %}"></script>
+<script src="{% static 'main/js/wow.min.js' %}"></script>
+<script src="{% static 'main/js/nav-tool.js' %}"></script>
+<script src="{% static 'main/js/aos.js' %}"></script>
+<script src="{% static 'main/js/plugins.js' %}"></script>
+<script src="{% static 'main/js/main.js' %}"></script>
+
+<script src="{% static 'main/js/jquery-2.1.1.js' %}"></script>
+<script src="{% static 'main/js/jquery.mobile.min.js' %}"></script>
+<script src="{% static 'main/js/main2.js' %}"></script> <!-- Resource jQuery -->
+</body>
+
+</html>

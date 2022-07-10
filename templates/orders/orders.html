@@ -1,0 +1,100 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block main %}
+
+    <!-- main-area -->
+    <main>
+
+        <!-- breadcrumb-area -->
+        {#        <section class="breadcrumb-area breadcrumb-bg" data-background="img/bg/breadcrumb_bg03.jpg">#}
+        {#            <div class="container">#}
+        {#                <div class="row">#}
+        {#                    <div class="col-12">#}
+        {#                        <div class="breadcrumb-content">#}
+        {#                            <h2>صفحه سبد خرید</h2>#}
+        {##}
+        {#                        </div>#}
+        {#                    </div>#}
+        {#                </div>#}
+        {#            </div>#}
+        {#        </section>#}
+        <!-- breadcrumb-area-end -->
+
+        <!-- cart-area -->
+        <div class="cart-area pt-100 pb-100">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="cart-wrapper">
+
+                            <div class="cart-total pt-95">
+                                <h3 class="title">مجموع سبد خرید</h3>
+                                <div class="shop-cart-widget">
+                                    <form action="#">
+                                        <ul>
+
+                                            {##}
+                                            {#                                            <li>قیمت واحد : &emsp;&ensp;&emsp;&ensp;<span#}
+                                            {#                                                    id="price">تومان{{ order_item.price}}</span></li>#}
+                                            {#                                        <li>تعداد :&emsp;&ensp;&emsp;&ensp;&emsp;&ensp;&emsp;&emsp;&ensp;<span#}
+                                            {#                                                id="quantity">{{ order.quantity }}</span></li>#}
+                                            {% if order.discount %}
+                                                <li>تخفیف :&emsp;&ensp;&emsp;&ensp;&emsp;&ensp;&emsp;&ensp;<span
+                                                        id="discount">{{ order.discount }}%</span></li>
+                                            {% else %}
+                                                <empty></empty>
+                                            {% endif %}
+                                            <li class="cart-total-amount"><span>مجموع </span> <span
+                                                    class="amount">{{ order.get_total_price|intcomma }} تومان</span>
+                                            </li>
+                                        </ul>
+
+                                    </form>
+
+                                </div>
+                            </div>
+                            {% if messages %}
+                                <ul class="messages">
+                                    {% for message in messages %}
+                                        {% if message.tags %}
+
+                                            <div class="alert alert-success" role="alert">
+                                                <button type="button" class="close"
+                                                        data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>&nbsp;&nbsp;
+                                                {{ message }}
+
+                                            </div>
+
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                            <div class="shop-cart-bottom mt-20">
+                                <div class="cart-coupon">
+                                    <form action="{% url 'order:apply_coupon' order.id %}"
+                                          method="post">{% csrf_token %}
+                                        {{ form.as_p }}
+                                        <button class="btn">اعمال کد</button>
+                                    </form>
+                                </div>
+                                <div class="continue-shopping">
+                                    {#                                    <a href="shop.html" class="btn">بروز خرید </a>#}
+                                    <a href="{% url 'order:request' order.id %}" class="btn">پروسه پرداخت </a>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- cart-area-end -->
+
+    </main>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+
+
+<div class="header-category d-none d-lg-block">
+    <a href="javascript:" class="cat-toggle"><i class="fas fa-bars"></i>دسته بندی ها</a>
+    <ul class="category-menu">
+        {% for data in category %}
+            {% if data.parent == None %}
+                <li class="has-dropdown">
+                    <a href="{{ data.get_absolute_url }}">{{ data.name }}</a>
+                    {% if data.children.all %}
+                        {% include 'main/partials/category_loop.html' %}
+                    {% endif %}
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>

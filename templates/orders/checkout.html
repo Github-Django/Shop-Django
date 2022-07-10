@@ -1,0 +1,188 @@
+{% extends 'main/base.html' %}
+{% block main %}
+    <main>
+
+        {#            <!-- breadcrumb-area -->#}
+        {#            <section class="breadcrumb-area breadcrumb-bg" data-background="img/bg/breadcrumb_bg03.jpg">#}
+        {#                <div class="container">#}
+        {#                    <div class="row">#}
+        {#                        <div class="col-12">#}
+        {#                            <div class="breadcrumb-content">#}
+        {#                                <h2>صفحه پرداخت</h2>#}
+        {#                                <nav aria-label="breadcrumb">#}
+        {#                                    <ol class="breadcrumb">#}
+        {#                                        <li class="breadcrumb-item"><a href="index.html">خانه </a></li>#}
+        {#                                        <li class="breadcrumb-item active" aria-current="page">پرداخت </li>#}
+        {#                                    </ol>#}
+        {#                                </nav>#}
+        {#                            </div>#}
+        {#                        </div>#}
+        {#                    </div>#}
+        {#                </div>#}
+        {#            </section>#}
+        {#            <!-- breadcrumb-area-end -->#}
+
+        <!-- checkout-area -->
+        <section class="checkout-area pt-95 pb-95">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-7">
+                        <div class="checkout-wrap">
+                            <div class="checkout-top">
+                                <h5 class="title">جزئیات سفارش</h5>
+                                <a href="{% url 'cart:details' %}" class="back"><i class="fas fa-angle-left"></i> --
+                                    بازگشت به سبد خرید</a>
+                            </div>
+                            <form action="{% url 'order:create' %}" class="checkout-form" method="post">{% csrf_token %}
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-grp">
+                                            <label for="">نام اصلی <span>*</span></label>
+                                            <input type="text" name="first_name">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-grp">
+                                            <label for="">نام خانوادگی <span>*</span></label>
+                                            <input type="text" name="last_name">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="form-grp">
+                                            <label>استان <span>*</span></label>
+                                            <select name="ostan" id="id_ostan" required>
+                                                <option value={{ form.ostan }}>
+
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-grp">
+                                            <label>شهر شما <span>*</span></label>
+                                             <select name="shahrestan" id="id_shahrestan" required>
+                                                <option value={{ form.shahrestan }}>
+
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-grp">
+                                            <label for="address">آدرس خیابان <span>*</span></label>
+                                            <input type="text" name="address" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-grp">
+                                            <label for="zip">کد پستی <span>*</span></label>
+                                            <input type="text" name="postalcode" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-grp">
+                                            <label for="phone">شماره تلفن <span>*</span></label>
+                                            <input type="text" name="mobile" value="{{ user.mobile }}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-grp">
+                                            <label for="email">آدرس ایمیل <span>(اختیاری)</span></label>
+                                            <input type="email" name="email" value={{ user.email }}>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="different-address custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="stda">
+                                            <label class="custom-control-label" for="stda">به آدرس متفاوتی ارسال
+                                                شود؟</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-grp mb-0">
+                                            <label for="message">سفارش دهید که یادداشت داشته باشید
+                                                <span>(اختیاری)</span></label>
+                                            <textarea name="description" id="description"
+                                                      placeholder="درباره یادداشت های ویژه تحویل شما"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn"> پروسه پرداخت</button>
+                                {% csrf_token %}
+
+                            </form>
+                        </div>
+                    </div>
+                    {#                    <div class="col-lg-5 col-md-8">#}
+                    {#                        <aside class="checkout-sidebar">#}
+                    {#                            <h6 class="title">مجموع سبد خرید</h6>#}
+                    {#                            <div class="shop-cart-widget">#}
+                    {#                                <form action="{% url 'order:create' %}">#}
+                    {#                                    <ul>#}
+                    {#                                        <li class="sub-total"><span>کل خرید </span> 136000 تومان</li>#}
+                    {#                                        <li>#}
+                    {#                                            <span>حمل و نقل</span>#}
+                    {#                                            <div class="shop-check-wrap">#}
+                    {#                                                <div class="custom-control custom-checkbox">#}
+                    {#                                                    <input type="checkbox" class="custom-control-input"#}
+                    {#                                                           id="customCheck1">#}
+                    {#                                                    <label class="custom-control-label" for="customCheck1">نرخ مسطح:#}
+                    {#                                                        15000 تومان</label>#}
+                    {#                                                </div>#}
+                    {#                                                <div class="custom-control custom-checkbox">#}
+                    {#                                                    <input type="checkbox" class="custom-control-input"#}
+                    {#                                                           id="customCheck2">#}
+                    {#                                                    <label class="custom-control-label" for="customCheck2">حمل#}
+                    {#                                                        رایگان</label>#}
+                    {#                                                </div>#}
+                    {#                                                <a href="#" class="calculate">حمل و نقل را محاسبه کنید</a>#}
+                    {#                                            </div>#}
+                    {#                                        </li>#}
+                    {#                                        <li class="cart-total-amount"><span>مجموع </span> <span class="amount">151000 تومان</span>#}
+                    {#                                        </li>#}
+                    {#                                    </ul>#}
+                    {#                                    <div class="payment-method-info">#}
+                    {#                                        <div class="paypal-method-flex">#}
+                    {#                                            <div class="custom-control custom-checkbox">#}
+                    {#                                                <input type="checkbox" class="custom-control-input" id="customCheck5">#}
+                    {#                                                <label class="custom-control-label" for="customCheck5">پرداخت نقدی هنگام#}
+                    {#                                                    تحویل</label>#}
+                    {#                                                <p>هنگام تحویل با پرداخت نقدی پرداخت کنید.</p>#}
+                    {#                                            </div>#}
+                    {#                                        </div>#}
+                    {#                                        <div class="paypal-method-flex">#}
+                    {#                                            <div class="custom-control custom-checkbox">#}
+                    {#                                                <input type="checkbox" class="custom-control-input" id="customCheck6">#}
+                    {#                                                <label class="custom-control-label" for="customCheck6">پرداخت در#}
+                    {#                                                    کارت</label>#}
+                    {#                                            </div>#}
+                    {#                                            <div class="paypal-logo"><img src="img/images/card.png" alt=""></div>#}
+                    {#                                        </div>#}
+                    {#                                    </div>#}
+                    {#                                    <div class="payment-terms">#}
+                    {#                                        <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از#}
+                    {#                                            طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که#}
+                    {#                                            لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود#}
+                    {#                                            ابزارهای کاربردی می باشد. </p>#}
+                    {#                                        <div class="custom-control custom-checkbox">#}
+                    {#                                            <input type="checkbox" class="custom-control-input" id="customCheck7">#}
+                    {#                                            <label class="custom-control-label" for="customCheck7">من شرایط وب سایت را#}
+                    {#                                                خوانده و با آنها موافقم</label>#}
+                    {#                                        </div>#}
+                    {#                                    </div>#}
+                    {#                                    <button class="btn"> پروسه پرداخت</button>#}
+                    {#                                </form>#}
+                    {#                            </div>#}
+                    {#                        </aside>#}
+                    {#                    </div>#}
+                </div>
+            </div>
+        </section>
+        <!-- checkout-area-end -->
+
+    </main>
+    <!-- main-area-end -->
+
+
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'registration/base.html' %}
+{% load static %}
+{% block register %}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+         {% if message.tags %}  <script>alert("{{ message }}")</script> {% endif %}    {% endfor %}
+</ul>
+{% endif %}
+    <div class="wrapper" style="background-image:url({% static 'registration/images/bg-registration-form-1.jpg' %})">
+        <div class="inner">
+            <div class="image-holder">
+                <img src="{% static 'registration/images/registration-form-1.jpg' %}" alt="">
+            </div>
+
+            <form method="post" action="">{% csrf_token %}
+                <br>
+                <br>
+                <br>
+                <h3>فعال ‌سازی شماره تلفن همراه</h3>
+                <br>
+                <br>
+                <br>
+                <div class="form-wrapper">
+                    <input type="number" required class="form-control" name="otp"
+                           placeholder="کد فعال سازی را وارد کنید">
+
+                </div>
+                    <button type="submit">فعال ‌سازی
+                        <i class="zmdi zmdi-arrow-right"></i>
+                    </button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
